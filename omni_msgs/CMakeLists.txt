@@ -7,6 +7,7 @@ add_message_files(FILES
 		OmniFeedback.msg 
 		OmniButtonEvent.msg 
 		OmniState.msg
+		Twee.msg
 		)
 
 generate_messages(DEPENDENCIES geometry_msgs sensor_msgs std_msgs)
