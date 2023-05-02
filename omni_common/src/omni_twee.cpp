@@ -61,6 +61,7 @@ struct OmniState {
   int twee_button;
   int twee_button_prev;
   int twee_angle;
+  int twee_opening;
 };
 
 class PhantomROS {
@@ -126,6 +127,7 @@ public:
     state->twee_button = 0;
     state->twee_angle = -1;
     state->twee_button_prev = 0;
+    state->twee_opening = -1;
     hduVector3Dd zeros(0, 0, 0);
     state->velocity = zeros;
     state->inp_vel1 = zeros;  //3x1 history of velocity
@@ -248,6 +250,7 @@ public:
       omni_msgs::Twee twee_msg;
       twee_msg.twee_button = state->twee_button;
       twee_msg.twee_angle = state->twee_angle;
+      twee_msg.twee_opening = state->twee_opening;
       state->twee_button_prev = state->twee_button;
       twee_publisher.publish(twee_msg);
    // ***********
@@ -352,7 +355,10 @@ HDCallbackCode HDCALLBACK omni_state_callback(void *pUserData)
 			// shift minimum encoder value to 0s
 			encoder = std::max(0, downCount - minTweeValue);
 			encoder = std::min(encoder, maxTweeValue);
-      omni_state->twee_angle = encoder;    
+                        omni_state->twee_angle = encoder;    
+			omni_state->twee_opening = (encoder-42)*100/(60-42);
+
+
 		}
 		// zero out downCount to start over again 
 		downCount = 0;
